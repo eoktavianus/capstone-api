@@ -231,16 +231,16 @@ def eda_catfreq_sql():
 # EDA Categorical n Freq with pandas
 @app.route('/eda/catfreq', methods=["GET"])
 def eda_catfreq():
-    url = 'http://127.0.0.1:5001/data/join/date'
+    url = 'https://capsapi.herokuapp.com/data/join/date'
     h = requests.get(url)
     dtDate = pd.DataFrame(h.json())
-    # h = get_data_multitable_date()
-    # dtDate = pd.DataFrame(h.json())
-    # dtx = dtDate[(dtDate.Country == 'Germany') & (dtDate.InvoiceWD == 'Monday')].\
-    #         groupby(['Country', 'InvoiceWD', 'Genre']).sum().\
-    #         sort_values(by='Quantity', ascending=False).reset_index()
-    # dtx = dtx[['Country', 'InvoiceWD', 'Genre', 'Quantity']].head()
-    return dtDate.to_json()
+    h = get_data_multitable_date()
+    dtDate = pd.DataFrame(h.json())
+    dtx = dtDate[(dtDate.Country == 'Germany') & (dtDate.InvoiceWD == 'Monday')].\
+            groupby(['Country', 'InvoiceWD', 'Genre']).sum().\
+            sort_values(by='Quantity', ascending=False).reset_index()
+    dtx = dtx[['Country', 'InvoiceWD', 'Genre', 'Quantity']].head()
+    return dtx.to_json()
 
 
 # Fetch Data Table from Chinook.db
