@@ -228,17 +228,36 @@ def eda_catfreq_sql():
                         ''', conn)
     return dtGenre.to_json()
 
+def get_dtDate():
+    conn = sqlite3.connect('data/chinook.db')
+    dtDate = pd.read_sql_query('''
+                        SELECT i.*, c.Country,
+                            ii.TrackId, ii.UnitPrice, ii.Quantity, ii.UnitPrice * ii.Quantity as TotalPriceDtl,
+                            t.Name TrackName, t.Composer, g.Name Genre, ar.Name artis
+                        FROM invoices i
+                        LEFT JOIN invoice_items ii ON i.invoiceId = ii.invoiceId
+                        LEFT JOIN customers c ON c.CustomerId = i.CustomerId
+                        LEFT JOIN Tracks t ON t.TrackId = ii.TrackId
+                        LEFT JOIN Genres g ON g.GenreId = t.GenreId
+                        LEFT JOIN Albums al ON al.AlbumId = t.AlbumId
+                        LEFT JOIN Artists ar ON ar.ArtistId = al.ArtistId
+                        ''', conn,
+                        parse_dates='InvoiceDate')
+    dtDate['InvoiceWD'] = dtDate['InvoiceDate'].dt.day_name()
+    return dtDate
+
 # EDA Categorical n Freq with pandas
 @app.route('/eda/catfreq', methods=["GET"])
 def eda_catfreq():
-    url = 'https://capsapi.herokuapp.com/data/join/date'
-    h = requests.get(url)
-    dtDate = pd.DataFrame(h.json())
+#     url = 'https://capsapi.herokuapp.com/data/join/date'
+#     h = requests.get(url)
+#     dtDate = pd.DataFrame(h.json())
+    dtDate = get_dtDate()
     dtx = dtDate[(dtDate.Country == 'Germany') & (dtDate.InvoiceWD == 'Monday')].\
             groupby(['Country', 'InvoiceWD', 'Genre']).sum().\
             sort_values(by='Quantity', ascending=False).reset_index()
     dtx = dtx[['Country', 'InvoiceWD', 'Genre', 'Quantity']].head()
-    return dtx.to_json()
+    return dtDate.to_json()
 
 
 # Fetch Data Table from Chinook.db
@@ -268,6 +287,21 @@ def get_data_multitable_date():
                           parse_dates='InvoiceDate')
     data['InvoiceWD'] = data['InvoiceDate'].dt.day_name()
     return data.to_json()
+
+# reshapping visualization stack
+@app.route('/resviz/stack', methods=["GET"])
+def resviz_stack():
+    pfile = 'data/dtx2'
+    dtDate = get_dtDate()
+    dtx2 = dtDate[(dtDate.Country == 'Germany') & (dtDate.InvoiceWD == 'Monday')].\
+        pivot_table(index=['Country', 'InvoiceWD'],
+                    columns='Genre',
+                   values='Quantity',
+                   aggfunc='sum')
+    dtx2 = dtx2.unstack().stack(level=0)
+    dtx2.to_pickle(pfile)
+    dt = pd.DataFrame([{"filepath" : pfile}])
+    return dt.to_json()
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

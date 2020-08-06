@@ -21,8 +21,8 @@ All of these components are relatives to `maximum_score`.
 
 
 **Do at least 2 of the following operations to get 3**
-- [ ] stack/unstack
-- [ ] melt 
+- [x] stack/unstack --> Capstone Guideline.ipynb
+- [x] melt --> Capstone Guideline.ipynb
 - [x] groupby --> /eda/groupby
 
 **Do at least 1 of the following operations to get 2**
@@ -35,7 +35,7 @@ All of these components are relatives to `maximum_score`.
 - [x] Deploy to Heroku using Heroku Git 
 
 **Complete at least 2 to get 2 :**
-- [ ] Create 2 or more static endpoints
+- [x] Create 2 or more static endpoints
 - [x] Create 1 or more dynamic endpoint
 
 #### 4. Documentation (Total 3)
