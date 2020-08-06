@@ -2,6 +2,12 @@ from flask import Flask, request
 import pandas as pd 
 app = Flask(__name__) 
 
+@app.route('/data/')
+def data():
+    df = pd.read_csv('data/books_c.csv')
+    return (df.to_json())
+
+
 # mendapatkan keseluruhan data dari <data_name>
 @app.route('/data/get/<data_name>', methods=['GET']) 
 def get_data(data_name): 
