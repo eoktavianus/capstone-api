@@ -14,19 +14,19 @@ All of these components are relatives to `maximum_score`.
 #### 2. Exploratory Data Analysis: (Total 8)
 
 **Do at least at least 3 of the following operations to get 3**
-- [ ] Datetime operation 
-- [ ] Categorical operation 
-- [ ] Frequencies analysis 
+- [x] Datetime operation --> /data/join/date
+- [x] Categorical operation 
+- [x] Frequencies analysis 
 - [ ] Missing Value and Duplicates operation
 
 
 **Do at least 2 of the following operations to get 3**
 - [ ] stack/unstack
 - [ ] melt 
-- [ ] groupby 
+- [x] groupby --> /eda/groupby
 
 **Do at least 1 of the following operations to get 2**
-- [ ] Take data from joining minimum of 4 table 
+- [x] Take data from joining minimum of 4 table --> /data/join/date
 
 #### 3. Deployment (Total 3)
 

@@ -1,4 +1,5 @@
 from flask import Flask, request
+import requests
 import pandas as pd
 import sqlite3
 import os
@@ -180,6 +181,95 @@ def get_englishversion():
                         "ListBook" : [data]
                     })
     return dt.to_json()
+
+# EDA Group BY DataFrame
+@app.route('/eda/groupby') 
+def eda_groupby():
+    books2 = pd.read_csv('data/books_c.csv')
+    data1 = books2[['authors','# num_pages']]
+    data = data1.groupby(['authors']).mean().sort_values(by='# num_pages', ascending=False).reset_index().head()
+    return data.to_json()
+
+# EDA Categorical n Freq with sql
+@app.route('/eda/catfreq/sql/', methods=["GET"])
+def eda_catfreq_sql():
+    conn = sqlite3.connect('data/chinook.db')
+    dtGenre = pd.read_sql_query('''
+                        SELECT g.Name Genre, c.Country,
+                            CASE CAST(strftime('%w', i.InvoiceDate) AS integer)
+                              when 0 then 'Sunday'
+                              when 1 then 'Monday'
+                              when 2 then 'Tuesday'
+                              when 3 then 'Wednesday'
+                              when 4 then 'Thursday'
+                              when 5 then 'Friday'
+                              else 'Saturday'
+                            END as InvoiceWD,
+                            SUM(ii.Quantity) TotalQty
+                        FROM invoices i
+                        LEFT JOIN invoice_items ii ON i.invoiceId = ii.invoiceId
+                        LEFT JOIN customers c ON c.CustomerId = i.CustomerId
+                        LEFT JOIN Tracks t ON t.TrackId = ii.TrackId
+                        LEFT JOIN Genres g ON g.GenreId = t.GenreId
+                        LEFT JOIN Albums al ON al.AlbumId = t.AlbumId
+                        LEFT JOIN Artists ar ON ar.ArtistId = al.ArtistId
+                        WHERE c.Country = 'Germany' AND CAST(strftime('%w', i.InvoiceDate) AS integer) = 1
+                        GROUP BY g.Name, c.Country,
+                            CASE CAST(strftime('%w', i.InvoiceDate) AS integer)
+                              when 0 then 'Sunday'
+                              when 1 then 'Monday'
+                              when 2 then 'Tuesday'
+                              when 3 then 'Wednesday'
+                              when 4 then 'Thursday'
+                              when 5 then 'Friday'
+                              else 'Saturday'
+                            END 
+                        ORDER BY TotalQty DESC
+                        ''', conn)
+    return dtGenre.to_json()
+
+# EDA Categorical n Freq with pandas
+@app.route('/eda/catfreq', methods=["GET"])
+def eda_catfreq():
+    url = 'http://127.0.0.1:5001/data/join/date'
+    h = requests.get(url)
+    dtDate = pd.DataFrame(h.json())
+    # h = get_data_multitable_date()
+    # dtDate = pd.DataFrame(h.json())
+    # dtx = dtDate[(dtDate.Country == 'Germany') & (dtDate.InvoiceWD == 'Monday')].\
+    #         groupby(['Country', 'InvoiceWD', 'Genre']).sum().\
+    #         sort_values(by='Quantity', ascending=False).reset_index()
+    # dtx = dtx[['Country', 'InvoiceWD', 'Genre', 'Quantity']].head()
+    return dtDate.to_json()
+
+
+# Fetch Data Table from Chinook.db
+@app.route('/get/data/table/<table_name>', methods={"GET"})
+def get_chinook_table(table_name):
+    conn = sqlite3.connect('data/chinook.db')
+    sSQL = 'SELECT * FROM ' + str(table_name)
+    data = pd.read_sql_query(sSQL, conn)
+    return data.to_json()
+
+# EDA datetime + Joining > 4 Table
+@app.route('/data/join/date')
+def get_data_multitable_date():
+    conn = sqlite3.connect('data/chinook.db')
+    data = pd.read_sql_query('''
+                        SELECT i.*, c.Country,
+                            ii.TrackId, ii.UnitPrice, ii.Quantity, ii.UnitPrice * ii.Quantity as TotalPriceDtl,
+                            t.Name TrackName, t.Composer, g.Name Genre, ar.Name artis
+                        FROM invoices i
+                        LEFT JOIN invoice_items ii ON i.invoiceId = ii.invoiceId
+                        LEFT JOIN customers c ON c.CustomerId = i.CustomerId
+                        LEFT JOIN Tracks t ON t.TrackId = ii.TrackId
+                        LEFT JOIN Genres g ON g.GenreId = t.GenreId
+                        LEFT JOIN Albums al ON al.AlbumId = t.AlbumId
+                        LEFT JOIN Artists ar ON ar.ArtistId = al.ArtistId
+                        ''', conn,
+                          parse_dates='InvoiceDate')
+    data['InvoiceWD'] = data['InvoiceDate'].dt.day_name()
+    return data.to_json()
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
