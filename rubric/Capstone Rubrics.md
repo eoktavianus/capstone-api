@@ -7,9 +7,9 @@ All of these components are relatives to `maximum_score`.
 
 #### 1. Environment and Installations (Total 2)
 **Complete at least 3 to get 2**
-- [ ] Created virtual environment called "capstone-api"
-- [ ] Installed Packages using conda / pip
-- [ ] Export virtual environment using pip freeze
+- [x] Created virtual environment called "capstone-api"
+- [x] Installed Packages using conda / pip
+- [x] Export virtual environment using pip freeze 'NewRequirements.txt'
 
 #### 2. Exploratory Data Analysis: (Total 8)
 
