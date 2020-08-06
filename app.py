@@ -1,5 +1,8 @@
 from flask import Flask, request
 import pandas as pd
+import sqlite3
+import os
+import json
 
 app = Flask(__name__)   
 
@@ -108,6 +111,75 @@ def form_equal():
                 <input type="submit" value="Submit"><br>
             </form>'''
 
+@app.route('/data/getbyfileext/<data_name>', methods=["GET"])
+def get_databyFileExt(data_name):
+    fname, fext = os.path.splitext(data_name)
+    if fext == '.db':
+        conn = sqlite3.connect('data/' + str(data_name))
+        dt = pd.read_sql_query('''SELECT * FROM customers  LIMIT 5''', conn)
+    elif fext == '.csv':
+        dt = pd.read_csv('data/' + str(data_name))
+    else:
+        dt = pd.DataFrame({"Message" : ["File Not Recognize"]})
+
+    return dt.to_json()
+
+'''
+ question 1 : Top 5 Books berdasarkan Ratings count tertinggi
+ question 2 : Top 5 Books berdasarkan halaman terbanyak
+'''
+@app.route('/question/form/', methods = ["GET", "POST"])
+def get_answer_form():
+    if request.method == "POST":
+        key1 = 'quest'
+        questopt = request.form.get(key1)
+        books = pd.read_csv('data/books_c.csv')
+        if questopt == '1':
+            data = books.sort_values(by=['ratings_count'], ascending=False).head()
+        else:
+            data = books.sort_values(by=['# num_pages'], ascending=False).head()
+        return data.to_json()
+    
+    
+    return '''<form method= "POST">    
+                Ask Me :
+                <select name='quest'>
+                    <option value="1">Top 5 Books with HIghest Ratings count</option>
+                    <option value="2">Top 5 Books dengan halaman terbanyak</option>
+                </select><br>
+                <input type="submit" value="Submit"><br>
+            </form>'''
+
+# sama dengan pertanyaan sebelumnya hanya fetch data via query
+@app.route('/question/query', methods = ["GET"])
+def get_answer_query():
+    key1 = 'questopt'
+    questopt = request.args.get(key1)
+    books = pd.read_csv('data/books_c.csv')
+    if questopt == '1':
+        data = books.sort_values(by=['ratings_count'], ascending=False).head()
+    else:
+        data = books.sort_values(by=['# num_pages'], ascending=False).head()
+    return data.to_json()
+
+# Static Endpoint 1 : Get Data Authors
+@app.route('/get/author', methods=["GET"])
+def get_authors():
+    books = pd.read_csv('data/books_c.csv')
+    books.authors = books.authors.astype('category')
+    data = pd.DataFrame(books.authors.unique())
+    return data.to_json()
+
+# Static Endpoint 2 : Get Total and List Book Enlish Version
+@app.route('/get/englishversion', methods=["GET"])
+def get_englishversion():
+    books = pd.read_csv('data/books_c.csv')
+    data = books[books.language_code == 'eng']
+    total = data.bookID.count()
+    dt = pd.DataFrame({"Total English Version" : [total],
+                        "ListBook" : [data]
+                    })
+    return dt.to_json()
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

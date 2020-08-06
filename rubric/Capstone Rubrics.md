@@ -31,12 +31,12 @@ All of these components are relatives to `maximum_score`.
 #### 3. Deployment (Total 3)
 
 **Complete at least 1 to get 1 :**
-- [ ] Deploy to Heroku using Github 
-- [ ] Deploy to Heroku using Heroku Git 
+- [x] Deploy to Heroku using Github 
+- [x] Deploy to Heroku using Heroku Git 
 
 **Complete at least 2 to get 2 :**
 - [ ] Create 2 or more static endpoints
-- [ ] Create 1 or more dynamic endpoint
+- [x] Create 1 or more dynamic endpoint
 
 #### 4. Documentation (Total 3)
 **Complete at least 2 to get 3 points :**
