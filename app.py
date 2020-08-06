@@ -1,6 +1,6 @@
 from flask import Flask, request 
 import pandas as pd 
-app = Flask(__name__)
+app = Flask(__name__) 
 
 # mendapatkan keseluruhan data dari <data_name>
 @app.route('/data/get/<data_name>', methods=['GET']) 
