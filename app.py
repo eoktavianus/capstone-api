@@ -234,8 +234,6 @@ def eda_catfreq():
     url = 'https://capsapi.herokuapp.com/data/join/date'
     h = requests.get(url)
     dtDate = pd.DataFrame(h.json())
-    h = get_data_multitable_date()
-    dtDate = pd.DataFrame(h.json())
     dtx = dtDate[(dtDate.Country == 'Germany') & (dtDate.InvoiceWD == 'Monday')].\
             groupby(['Country', 'InvoiceWD', 'Genre']).sum().\
             sort_values(by='Quantity', ascending=False).reset_index()
