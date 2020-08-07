@@ -90,13 +90,13 @@ Return data Authors from books_c.csv with the highest # num_pages
 **Project Capstone Take data from joining minimum of 4 table**
 ```
 17. /eda/catfreq/sql/
-Return data Genre, Country from books_c.csv with the highest sell qty in Monday using sql
+Return data Genre, Country from multi table in chinook.db with the highest sell qty in Monday using sql
 ```
 
 **Project Capstone Categorical operation & Frequencies analysis**
 ```
 18. /eda/catfreq
-Return data Genre, Country from books_c.csv with the highest sell qty in Monday using pandas dataframe technique
+Return data Genre, Country from multi table in chinook.db with the highest sell qty in Monday using pandas dataframe technique
 
 19. /get/data/table/<table_name>
 Return all data from <table_name> in chinook.db
