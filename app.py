@@ -11,11 +11,11 @@ app = Flask(__name__)
 def home():
     return 'Hellow, Good Morning'
 
-@app.route('/hello/<your_name>')
+@app.route('/hello/<your_name>', methods={"GET"})
 def hello(your_name):
     return 'Hello ' + str(your_name)
 
-@app.route('/query')
+@app.route('/query', methods={"GET"})
 def query_example():
     key1 = 'name'
     key2 = 'age'
@@ -171,7 +171,7 @@ def get_authors():
     data = pd.DataFrame(books.authors.unique())
     return data.to_json()
 
-# Static Endpoint 2 : Get Total and List Book Enlish Version
+# Static Endpoint 2 : Get Total and List Book English Version
 @app.route('/get/englishversion', methods=["GET"])
 def get_englishversion():
     books = pd.read_csv('data/books_c.csv')
@@ -183,7 +183,7 @@ def get_englishversion():
     return dt.to_json()
 
 # EDA Group BY DataFrame
-@app.route('/eda/groupby') 
+@app.route('/eda/groupby', methods={"GET"}) 
 def eda_groupby():
     books2 = pd.read_csv('data/books_c.csv')
     data1 = books2[['authors','# num_pages']]
