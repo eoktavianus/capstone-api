@@ -12,7 +12,7 @@ def home():
     return 'Hellow, Welcome to my capstone project Have a Great Day'
 
 @app.route('/home', methods=["GET"])
-def home():
+def home2():
     return 'Hellow, Good Morning'
 
 @app.route('/hello/<your_name>', methods={"GET"})
