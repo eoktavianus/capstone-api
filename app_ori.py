@@ -1,6 +1,6 @@
 from flask import Flask, request 
 import pandas as pd 
-app = Flask(__name__) 
+# app = Flask(__name__) 
 
 # static endpoint
 @app.route('/data/')
