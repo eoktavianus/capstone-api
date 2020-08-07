@@ -303,9 +303,10 @@ def resviz_stack():
                    values='Quantity',
                    aggfunc='sum')
     dtx2 = dtx2.unstack().stack(level=0)
-    dtx2.to_pickle(pfile)
-    dt = pd.DataFrame([{"filepath" : pfile}])
+    # dtx2.to_pickle(pfile)
+    # dt = pd.DataFrame([{"filepath" : pfile}])
+    dtx2 = dtx2.reset_index()
     return dt.to_json()
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, port=5000)

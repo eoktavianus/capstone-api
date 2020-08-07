@@ -81,19 +81,19 @@ Return all Authors from books_c.csv
 Return Total and List Book English Version from books_c.csv
 ```
 
-<!-- Project Capstone EDA groupby DataFrame-->
+**Project Capstone EDA groupby DataFrame**
 ```
 16. /eda/groupby', method = GET
 Return data Authors from books_c.csv with the highest # num_pages
 ```
 
-<!-- Project Capstone Take data from joining minimum of 4 table -->
+**Project Capstone Take data from joining minimum of 4 table**
 ```
 17. /eda/catfreq/sql/
 Return data Genre, Country from books_c.csv with the highest sell qty in Monday using sql
 ```
 
-<!-- Project Capstone Categorical operation & Frequencies analysis  -->
+**Project Capstone Categorical operation & Frequencies analysis**
 ```
 18. /eda/catfreq
 Return data Genre, Country from books_c.csv with the highest sell qty in Monday using pandas dataframe technique
@@ -102,7 +102,7 @@ Return data Genre, Country from books_c.csv with the highest sell qty in Monday 
 Return all data from <table_name> in chinook.db
 ```
 
-<!-- Project Capstone Datetime operation + Joining Table  -->
+**Project Capstone Datetime operation + Joining Table**
 ```
 20. /data/join/date
 Return data invoices and detail items from multiple table in chinook.db
@@ -116,6 +116,6 @@ If you want to try it, you can access (copy-paste it) :
 - https://capsapi.herokuapp.com//data/getbyfileext/books_c.csv
 - https://capsapi.herokuapp.com//data/getbyfileext/chinook.db
 - https://capsapi.herokuapp.com/data/get/equal/books_c.csv/isbn/0439785960
-- https://capsapi.herokuapp.com/question/form/
+- https://capsapi.herokuapp.com/question/form
 - https://capsapi.herokuapp.com/question/query?questopt=1
 - and so on, just follow the endpoint's pattern
