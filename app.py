@@ -7,7 +7,11 @@ import json
 
 app = Flask(__name__)   
 
-@app.route('/home')
+@app.route('/', methods=["GET"])
+def home():
+    return 'Hellow, Welcome to my capstone project Have a Great Day'
+
+@app.route('/home', methods=["GET"])
 def home():
     return 'Hellow, Good Morning'
 

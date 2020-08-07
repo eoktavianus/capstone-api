@@ -22,7 +22,7 @@ ___
 We have deployed a simple example on : https://capsapi.herokuapp.com
 Here's the list of its endpoints: 
 ```
-1. / , method = GET
+1. /, method = GET
 Base Endpoint, returning welcoming string value. 
 
 2. /data/get/<data_name> , method = GET
@@ -33,7 +33,7 @@ Return full data <data_name> in JSON format. Currently available data are:
 3. /data/get/equal/<data_name>/<column>/<value> , method = GET
 Return all <data_name> where the value of column <column> is equal to <value>
 
-4. /home
+4. /home, method = GET
 Retunn static value, welcome greetings string value.
 
 5. /hello/<your_name>, method = GET
